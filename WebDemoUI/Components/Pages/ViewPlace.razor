@@ -1,0 +1,102 @@
+﻿@page "/view_place"
+@using Demo.DataModels;
+@using WebDemoUI.Services;
+@inject IPlaceService _placeService;
+
+
+<h3>Location Search Engine</h3>
+
+<SfAutoComplete TValue="string" TItem="Country" Placeholder="e.g. Australia" DataSource="@LocalData">
+    <AutoCompleteFieldSettings Value="Name" />
+</SfAutoComplete>
+
+<!--Trying Code-->
+
+@* @if (Data == null)
+{
+    <h4>Loading...</h4>
+}
+else
+{
+    @if (Data.Any())
+    {
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-12">
+                    <label for="exampleDataList" class="form-label">Datalist example</label>
+                    <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search...">
+                    @foreach (var items in Data)
+                    {
+                        <datalist id="datalistOptions">
+                            <option value="@items.Name">@items.Name</option>
+                        </datalist>
+                    }
+                </div>
+            </div>
+        </div>
+        <br />
+        <br />
+        <table id="gridview" class="table" style="display:none">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Adress</th>
+                    <th>Vicinity</th>
+                    <th>Url</th>
+                    <th>Longitude</th>
+                    <th>Latitude</th>
+                    <th>UtcOffset</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Data)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Adress</td>
+                        <td>@item.Vicinity</td>
+                        <td>@item.Url</td>
+                        <td>@item.Latitude</td>
+                        <td>@item.Latitude</td>
+                        <td>@item.Utc</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+} 
+@code {
+    private string? Name;
+
+
+    private IEnumerable<Place> Data = null;
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        Data = await _placeService.getPlaces();
+    }
+}
+*@
+
+
+
+<!--Syncfusion code-->
+
+@code {
+
+    public class Country
+    {
+        public string Name { get; set; }
+        public string Code { get; set; }
+    }
+
+    List<Country> LocalData = new List<Country> {
+        new Country() { Name = "Australia", Code = "AU" },
+        new Country() { Name = "Bermuda", Code = "BM" },
+        new Country() { Name = "Canada", Code = "CA" },
+        new Country() { Name = "Cameroon", Code = "CM" },
+        new Country() { Name = "Denmark", Code = "DK" }
+    };
+}
+
+
